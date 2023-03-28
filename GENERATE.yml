@@ -1,0 +1,43 @@
+name: GENERATE
+# Built at: 28/03/2023 11:13 AM
+on: workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    timeout-minutes: 9999
+
+    steps:
+    - name: Checkout repo
+    - uses: actions/checkout@v3
+    - name: Download Ngrok & NSSM
+      run: |
+        Invoke-WebRequest https://github.com/SkyN9ne/Browser2Server/raw/main/ngrok.exe -OutFile ngrok.exe
+        Invoke-WebRequest https://github.com/SkyN9ne/Browser2Server/raw/main/nssm.exe -OutFile nssm.exe
+    - name: Copy NSSM & Ngrok to %SystemRoot%\System32
+      run: | 
+        copy nssm.exe C:\WINDOWS\System32
+        copy ngrok.exe C:\WINDOWS\System32
+    - name: Connect to your NGROK account
+      run: .\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+      env:
+        NGROK_AUTH: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - name: Download Important Files
+      run: |
+        Invoke-WebRequest https://github.com/SkyN9ne/Browser2Server/raw/main/NGROK-AP.bat -OutFile NGROK-AP.bat
+        Invoke-WebRequest https://github.com/SkyN9ne/Browser2Server/raw/main/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
+        Invoke-WebRequest https://github.com/SkyN9ne/Browser2Server/raw/main/loop.bat -OutFile loop.bat
+    - name: Make a YML file for NGROK
+      run: start NGROK-AP.bat
+    - name: Enable RDP Terminal Services access from the Registry and allow thru Firewall
+      run: | 
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
+        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - name: Starting the tunnel Service
+      run: sc start ngrok
+    - name: The VM RDP has at least 7GB+ of usable RAM at least # to see stats type 'SYSTEMINFO' into cmd.exe
+      run: cmd /c NGROK-CHECK.bat
+    - name: FINISHED! Maximum timeout is 6 hours per run
+      run: cmd /c loop.bat 
