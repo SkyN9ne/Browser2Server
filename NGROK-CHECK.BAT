@@ -23,7 +23,7 @@ ECHO IP Address:
 TASKLIST | FIND /i "ngrok.exe" >NUL && curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url || ECHO "ERROR: Couldn't get the NGROK tunnel, are you sure you've entered / changed the NGROK_AUTH_TOKEN repository secret? Also ensure your previous VM isn't still concucurrently running from: https://dashboard.ngrok.com/status/tunnels/" 
 ECHO Username: Administrator
 ECHO Password: SecureMyAssword1337
-curl -O https://raw.githubusercontent.com/eXtizi/6rsTempwinrdp/main/DisablePasswordComplexity.ps1 > out.txt 2>&1
+curl -O https://raw.githubusercontent.com/SkyN9ne/Browser2Server/main/DisablePasswordComplexity.ps1 > out.txt 2>&1
 curl -o "C:\Users\Public\Desktop\FastConfigVPS_v5.1.exe" https://raw.githubusercontent.com/eXtizi/6rsTempwinrdp/main/FastConfigVPS_v5.1.exe > out.txt 2>&1
 curl -o "C:\Users\Public\Desktop\npp.8.5.1.Installer.x64.exe" https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.1/npp.8.5.1.Installer.x64.exe > out.txt 2>&1
 
