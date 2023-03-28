@@ -1,5 +1,4 @@
-name: GENERATE
-# Built at: 28/03/2023 11:57 AM
+name: RunAction
 on: workflow_dispatch
 
 jobs:
